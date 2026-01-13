@@ -146,12 +146,12 @@ const defaultDecoder: (
   encoding: Encoding,
   abortController: AbortController,
 ) => Promise<DemTile> = shouldUseVideoFrame()
-  ? decodeImageVideoFrame
-  : offscreenCanvasSupported()
-    ? decodeImageModern
-    : isWorker()
-      ? decodeImageOnMainThread
-      : decodeImageOld;
+    ? decodeImageVideoFrame
+    : offscreenCanvasSupported()
+      ? decodeImageModern
+      : isWorker()
+        ? decodeImageOnMainThread
+        : decodeImageOld;
 
 export default defaultDecoder;
 
@@ -181,10 +181,37 @@ export function decodeParsedImage(
   encoding: Encoding,
   input: Uint8ClampedArray,
 ): DemTile {
-  const decoder: (r: number, g: number, b: number) => number =
-    encoding === "mapbox"
-      ? (r, g, b) => -10000 + (r * 256 * 256 + g * 256 + b) * 0.1
-      : (r, g, b) => r * 256 + g + b / 256 - 32768;
+  let decoder: (r: number, g: number, b: number) => number;
+
+  switch (encoding) {
+    case "mapbox":
+      decoder = (r, g, b) => -10000 + (r * 256 * 256 + g * 256 + b) * 0.1;
+      break;
+
+    case "terrarium":
+      decoder = (r, g, b) => r * 256 + g + b / 256 - 32768;
+      break;
+
+    case "gb16": {
+      const totalColorRange = 255 * 256 + 255 - 1;
+
+      decoder = (r, g, b) => {
+        if (r === 255 && g === 255 && b === 255) return NaN;
+
+        const index = g * 256 + b;
+
+        if (index >= 65535) return NaN;
+
+        return index / totalColorRange;
+      };
+      break;
+    }
+
+    default:
+      decoder = (r, g, b) => r * 256 + g + b / 256 - 32768;
+      break;
+  }
+
   const data = new Float32Array(width * height);
   for (let i = 0; i < input.length; i += 4) {
     data[i / 4] = decoder(input[i], input[i + 1], input[i + 2]);

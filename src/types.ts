@@ -3,7 +3,7 @@ import type { Timer } from "./performance";
 import type WorkerDispatch from "./worker-dispatch";
 
 /** Scheme used to map pixel rgb values elevations. */
-export type Encoding = "terrarium" | "mapbox";
+export type Encoding = "terrarium" | "mapbox" | "gb16";
 export interface IsTransferrable {
   transferrables: Transferable[];
 }
@@ -14,7 +14,7 @@ export interface DemTile {
   /** elevation values in row-major order */
   data: Float32Array;
 }
-export interface TransferrableDemTile extends DemTile, IsTransferrable {}
+export interface TransferrableDemTile extends DemTile, IsTransferrable { }
 /** A rendered contour tile */
 export interface ContourTile {
   /** Encoded mapbox vector tile bytes */
@@ -22,7 +22,7 @@ export interface ContourTile {
 }
 export interface TransferrableContourTile
   extends ContourTile,
-    IsTransferrable {}
+  IsTransferrable { }
 
 export interface FetchResponse {
   data: Blob;
