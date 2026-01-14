@@ -14,7 +14,7 @@ export interface DemTile {
   /** elevation values in row-major order */
   data: Float32Array;
 }
-export interface TransferrableDemTile extends DemTile, IsTransferrable { }
+export interface TransferrableDemTile extends DemTile, IsTransferrable {}
 /** A rendered contour tile */
 export interface ContourTile {
   /** Encoded mapbox vector tile bytes */
@@ -22,7 +22,7 @@ export interface ContourTile {
 }
 export interface TransferrableContourTile
   extends ContourTile,
-  IsTransferrable { }
+    IsTransferrable {}
 
 export interface FetchResponse {
   data: Blob;

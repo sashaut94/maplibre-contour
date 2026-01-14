@@ -146,12 +146,12 @@ const defaultDecoder: (
   encoding: Encoding,
   abortController: AbortController,
 ) => Promise<DemTile> = shouldUseVideoFrame()
-    ? decodeImageVideoFrame
-    : offscreenCanvasSupported()
-      ? decodeImageModern
-      : isWorker()
-        ? decodeImageOnMainThread
-        : decodeImageOld;
+  ? decodeImageVideoFrame
+  : offscreenCanvasSupported()
+    ? decodeImageModern
+    : isWorker()
+      ? decodeImageOnMainThread
+      : decodeImageOld;
 
 export default defaultDecoder;
 
