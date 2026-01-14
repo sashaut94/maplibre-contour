@@ -55,8 +55,8 @@ type ResponseCallbackV3 = (
 type V3OrV4Protocol = <
   T extends AbortController | ResponseCallbackV3,
   R = T extends AbortController
-  ? Promise<GetResourceResponse<ArrayBuffer>>
-  : { cancel: () => void },
+    ? Promise<GetResourceResponse<ArrayBuffer>>
+    : { cancel: () => void },
 >(
   requestParameters: RequestParameters,
   arg2: T,
@@ -64,26 +64,26 @@ type V3OrV4Protocol = <
 
 const v3compat =
   (v4: AddProtocolAction): V3OrV4Protocol =>
-    (requestParameters, arg2) => {
-      if (arg2 instanceof AbortController) {
-        return v4(requestParameters, arg2) as any;
-      } else {
-        const abortController = new AbortController();
-        v4(requestParameters, abortController)
-          .then(
-            (result) =>
-              arg2(
-                undefined,
-                result.data,
-                result.cacheControl as any,
-                result.expires as any,
-              ),
-            (err) => arg2(err),
-          )
-          .catch((err) => arg2(err));
-        return { cancel: () => abortController.abort() };
-      }
-    };
+  (requestParameters, arg2) => {
+    if (arg2 instanceof AbortController) {
+      return v4(requestParameters, arg2) as any;
+    } else {
+      const abortController = new AbortController();
+      v4(requestParameters, abortController)
+        .then(
+          (result) =>
+            arg2(
+              undefined,
+              result.data,
+              result.cacheControl as any,
+              result.expires as any,
+            ),
+          (err) => arg2(err),
+        )
+        .catch((err) => arg2(err));
+      return { cancel: () => abortController.abort() };
+    }
+  };
 
 const used = new Set<string>();
 

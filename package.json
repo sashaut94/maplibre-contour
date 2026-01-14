@@ -1,5 +1,5 @@
 {
-  "name": "maplibre-contour",
+  "name": "@sashaut/maplibre-contour",
   "version": "0.1.0",
   "description": "Render contour lines from raster elevation tiles in maplibre-gl-js",
   "unpkg": "dist/index.min.js",
@@ -27,8 +27,7 @@
     "format": "prettier src --write",
     "checkformat": "prettier src --check",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run test && npm run build",
-    "prepare": "pnpm build"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -40,8 +39,7 @@
   "homepage": "https://github.com/onthegomap/maplibre-contour",
   "files": [
     "build/",
-    "dist/*",
-    "src/"
+    "dist/*"
   ],
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
